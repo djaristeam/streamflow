@@ -1,71 +1,261 @@
 ## ⚡ Quick Install [StreamFlow](https://github.com/bangtutorial/streamflow)
 
-### Installation
+![logo](https://github.com/user-attachments/assets/50231124-d546-43cb-9cf4-7a06a1dad5bd)
+
+# StreamFlow v2.0: Fresh From The Oven 🔥
+
+StreamFlow adalah aplikasi live streaming yang memungkinkan kamu melakukan live streaming ke berbagai platform seperti YouTube, Facebook, dan platform lainnya menggunakan protokol RTMP. Aplikasi ini dapat berjalan di VPS (Virtual Private Server) dan mendukung streaming ke banyak platform secara bersamaan.
+
+![Untitled-2](https://github.com/user-attachments/assets/3d7bb367-a1b2-43a5-839b-b6aa8dd5de90)
+
+## ✨ Fitur Utama
+
+- **Multi-Platform Streaming** - Streaming ke berbagai platform populer secara bersamaan
+- **Video Gallery** - Kelola koleksi video dengan antarmuka yang intuitif
+- **Upload Video** - Upload dari local storage atau import langsung dari Google Drive
+- **Scheduled Streaming** - Jadwalkan streaming dengan pengaturan waktu yang fleksibel
+- **Advanced Settings** - Kontrol penuh untuk bitrate, resolusi, FPS, dan orientasi video
+- **Real-time Monitoring** - Monitor status streaming dengan dashboard real-time
+- **Video Analytics** - Pantau statistik dan performa video langsung dari aplikasi
+- **Responsive UI** - Antarmuka modern yang responsif di semua perangkat
+
+## 🛠️ System Requirements
+
+- **Node.js** v20 atau versi terbaru
+- **FFmpeg** untuk video processing
+- **SQLite3** (sudah termasuk dalam package)
+- **VPS/Server** dengan minimal 1 Core CPU & 1GB RAM
+- **Port** 7575 (dapat disesuaikan di file [.env](.env))
+
+
+## 🔧 Manual Installation
+
+### 1. Persiapan Server
+
+Update sistem operasi:
 ```bash
-curl -o install.sh https://raw.githubusercontent.com/afkarxyz/streamdev/main/install.sh && chmod +x install.sh && ./install.sh
+sudo apt update && sudo apt upgrade -y
 ```
 
-### Access Application
-- Open browser: `http://YOUR_SERVER_IP:7575`
-- Create username & password
-- **Sign out** after login
-
-### Reset Password
+Install Node.js:
 ```bash
-cd streamdev && node reset-password.js
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt-get install -y nodejs
 ```
 
-### Extract Logs
+Verifikasi instalasi Node.js:
 ```bash
-cd ~/streamdev/logs && curl -F'file=@app.log' https://0x0.st
+node --version
+npm --version
 ```
-## 🔖 Changelog: [17-06-2025](https://github.com/afkarxyz/streamdev/tree/fcb8a6ceb56d6391d9a0d023f9fe5959779a474f)
 
-* Menambahkan Logs.
-* Tampilan lebih minimalis.
-* Mengganti `fluent-ffmpeg` ke `@ffprobe-installer/ffprobe`
-  
-## 🔖 Changelog: [15-06-2025](https://github.com/afkarxyz/streamdev/tree/f8e9fdcd88264a5d1ca02f508d5d266a5e14fd20)
+Install FFmpeg:
+```bash
+sudo apt install ffmpeg -y
+```
 
-🖥️ Dashboard
+Verifikasi instalasi FFmpeg:
+```bash
+ffmpeg -version
+```
 
-* Notifikasi: Sekarang menampilkan riwayat commit dari repositori.
-* Refine Modal New Stream:
-  * Dropdown pemilihan video diratakan ke kiri.
-  * Mengubah posisi fitur "Loop Video".
-  * "Advanced Settings" sekarang menggunakan toggle. Akan muncul peringatan ketika diklik.
-  * Menambahkan informasi zona waktu, lokasi, dan IP.
-* Menambahkan tab pada "Streaming Status".
-* Menambahkan fungsi timer pada scheduled stream.
-* Mengubah posisi status stream dan memperjelas warnanya pada tampilan mobile.
+Install Git:
+```bash
+sudo apt install git -y
+```
 
-📁 Gallery
+### 2. Setup Project StreamFlow
 
-* Menambahkan informasi total video.
-* Menambahkan tombol "Clear" untuk menghapus semua video sekaligus.
-* Menambahkan fungsi batch upload untuk mengunggah banyak file sekaligus.
-* Menambahkan overlay progress bar saat import Google Drive ditutup.
-* Menampilkan waktu upload/import file.
-* Mengubah sort menjadi toggle.
-* Memperbaiki bug informasi ukuran file di atas 1 GB dan paginasi yang sebelumnya kurang akurat.
+Clone repository:
+```bash
+git clone https://github.com/djaristeam/streamflow
+```
 
-📜 History
+Masuk ke direktori project:
+```bash
+cd streamflow
+```
 
-* Menambahkan informasi total video.
-* Menambahkan tombol "Clear" untuk menghapus semua video sekaligus.
-* Menambahkan ikon filter berdasarkan platform.
-* Menambahkan tombol untuk menggunakan ulang riwayat stream (reuse stream history).
+Install dependencies:
+```bash
+npm install
+```
 
-⚙️ Settings
+Generate session secret:
+```bash
+npm run generate-secret
+```
 
-* Menghapus penggunaan API import Google Drive, diganti dengan direct download.
-* Menambahkan validasi password pada pengaturan keamanan (security settings).
+Konfigurasi port (opsional):
+```bash
+nano .env
+```
 
-🌍 Global
+### 3. Konfigurasi Firewall
 
-* Menghapus dependensi yang tidak terpakai, membersihkan kode yang tidak digunakan, dan memperbarui dependensi.
-* Menambahkan halaman baru "Analytics" untuk memantau performa video tanpa perlu membuka YouTube Studio.
-* Menambahkan halaman info perubahan update yang terletak di atas foto profil.
-* Ikon Streamflow sekarang dapat diklik.
-* Semua pesan alert kini menggunakan custom modal yang seragam.
-* Memperbaiki bug.
+**PENTING: Buka port SSH terlebih dahulu untuk menghindari terputusnya koneksi!**
+
+Buka port SSH (biasanya port 22):
+```bash
+sudo ufw allow ssh
+# atau jika menggunakan port custom SSH
+# sudo ufw allow [PORT_SSH_ANDA]
+```
+
+Buka port aplikasi (default: 7575):
+```bash
+sudo ufw allow 7575
+```
+
+Verifikasi aturan firewall sebelum mengaktifkan:
+```bash
+sudo ufw status verbose
+```
+
+Aktifkan firewall:
+```bash
+sudo ufw enable
+```
+
+Verifikasi status firewall setelah aktif:
+```bash
+sudo ufw status
+```
+
+### 4. Install Process Manager
+
+Install PM2 untuk mengelola aplikasi:
+```bash
+sudo npm install -g pm2
+```
+
+### 5. Menjalankan Aplikasi
+
+Jalankan aplikasi dengan PM2:
+```bash
+pm2 start app.js --name streamflow
+```
+
+Akses aplikasi melalui browser:
+```
+http://IP_SERVER:PORT
+```
+
+Contoh: `http://88.12.34.56:7575`
+
+> [!Important]
+> Setelah membuat akun pertama kali, lakukan **Sign Out** kemudian login kembali untuk sinkronisasi database.
+
+## 🔐 Reset Password
+
+Jika lupa password atau perlu reset akun:
+
+```bash
+cd streamflow && node reset-password.js
+```
+
+## ⏰ Pengaturan Timezone Server
+
+Untuk memastikan scheduled streaming berjalan dengan waktu yang akurat:
+
+### Cek timezone saat ini:
+```bash
+timedatectl status
+```
+
+### Lihat daftar timezone tersedia:
+```bash
+timedatectl list-timezones | grep Asia
+```
+
+### Set timezone ke WIB (Jakarta):
+```bash
+sudo timedatectl set-timezone Asia/Jakarta
+```
+
+### Restart aplikasi setelah mengubah timezone:
+```bash
+pm2 restart streamflow
+```
+
+## 🐳 Docker Deployment
+
+### 1. Persiapan Environment
+
+Buat file `.env` di root project:
+```env
+PORT=7575
+SESSION_SECRET=your_random_secret_here
+NODE_ENV=development
+```
+
+### 2. Build dan Jalankan
+
+```bash
+docker-compose up --build
+```
+
+Akses aplikasi: [http://localhost:7575](http://localhost:7575)
+
+### 3. Data Persistence
+
+Data akan tersimpan secara otomatis di:
+- Database: `db/`
+- Logs: `logs/`
+- Upload files: `public/uploads/`
+
+### 4. Reset Password (Docker)
+
+```bash
+docker-compose exec app node reset-password.js
+```
+
+## 🔫 Troubleshooting
+
+### Permission Error
+```bash
+chmod -R 755 public/uploads/
+```
+
+### Port Already in Use
+```bash
+# Cek proses yang menggunakan port
+sudo lsof -i :7575
+
+# Kill proses jika diperlukan
+sudo kill -9 <PID>
+```
+
+### Database Error
+```bash
+# Reset database (PERINGATAN: akan menghapus semua data)
+rm db/*.db
+
+# Restart aplikasi untuk membuat database baru
+pm2 restart streamflow
+```
+
+### Docker Troubleshooting
+
+**Tidak bisa login:**
+- Pastikan `NODE_ENV=development` untuk akses HTTP
+- Periksa permission folder:
+  ```bash
+  sudo chmod -R 777 db/ logs/ public/uploads/
+  ```
+- Pastikan `SESSION_SECRET` tidak berubah
+
+**Production (HTTPS):**
+- Set `NODE_ENV=production`
+- Akses melalui HTTPS untuk cookie session
+
+## 💫 Contributors
+
+[![Contributors](https://contrib.rocks/image?repo=bangtutorial/streamflow)](https://github.com/bangtutorial/streamflow/graphs/contributors)
+
+## 📄 License
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/bangtutorial/streamflow/blob/main/LICENSE)
+
+---
+© 2025 - [Bang Tutorial](https://youtube.com/bangtutorial)
