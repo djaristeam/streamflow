@@ -234,6 +234,15 @@ rm db/*.db
 # Restart aplikasi untuk membuat database baru
 pm2 restart streamflow
 ```
+⚠️ Error di YouTube: “Lebih dari satu proses transfer menggunakan URL utama”
+```bash
+# Matikan semua proses ffmpeg yang masih berjalan
+sudo pkill -9 ffmpeg
+
+# Restart aplikasi streamflow melalui PM2
+pm2 restart streamflow
+```
+
 
 ### Docker Troubleshooting
 
