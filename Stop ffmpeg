@@ -1,0 +1,4 @@
+menampilkan semua proses ffmpeg yang benar-benar aktif saat ini.
+pgrep -a ffmpeg
+Stop ffmpeg
+sudo kill -9 
